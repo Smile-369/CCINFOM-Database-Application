@@ -4,13 +4,12 @@ import java.util.ArrayList;
 public class DatabaseConnection {
     Connection connection;
     Statement statement;
-    public DatabaseConnection(){
+    public DatabaseConnection() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hoadb";
-            connection = DriverManager.getConnection(url,"root","12345678");
+            connection = DriverManager.getConnection(url, "root", "12345678");
             statement = connection.createStatement();
-            connection.close();
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }
