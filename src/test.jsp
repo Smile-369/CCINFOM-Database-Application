@@ -25,6 +25,12 @@
     }
 %>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Asset Form</title>
+</head>
+<body>
 <form method="POST">
     Asset ID: <input type="text" name="assetId"><br>
     Asset Name: <input type="text" name="assetName"><br>
@@ -40,3 +46,5 @@
     Enclosing Asset: <input type="text" name="enclosingAsset"><br>
     <input type="submit" value="Submit">
 </form>
+</body>
+</html>

@@ -16,7 +16,7 @@ public class DatabaseConnection {
             System.err.println("Exception: " + e.getMessage());
         }
     }
-    public void insertToAsset(String assetId, String assetName, String assetDescription, Date acquisitionDate,
+    public void insertToAsset(int assetId, String assetName, String assetDescription, Date acquisitionDate,
                               boolean forRent, double assetValue, String typeAsset, String status,
                               double locLatitude, double locLongitude, String hoaName, String enclosingAsset) {
         try {
@@ -24,7 +24,7 @@ public class DatabaseConnection {
                     " asset_value, type_asset, status, loc_lattitude, loc_longiture, hoa_name, enclosing_asset) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, assetId);
+            pstmt.setInt(1, assetId);
             pstmt.setString(2, assetName);
             pstmt.setString(3, assetDescription);
             pstmt.setDate(4, new java.sql.Date(acquisitionDate.getTime()));
@@ -62,7 +62,7 @@ public class DatabaseConnection {
         return assetList;
     }
 
-    public void deleteAsset(String assetID) {
+    public void deleteAsset(int assetID) {
         try {
             String query = "DELETE FROM assets WHERE asset_id=" + assetID;
             statement.executeUpdate(query);
@@ -81,6 +81,19 @@ public class DatabaseConnection {
     }
 
     public static void main(String[] args) {
-
+        DatabaseConnection databaseConnection= new DatabaseConnection();
+        databaseConnection.insertToAsset(1222, "chair", "String assetDescription", new Date(2023,4,15),
+                true, 312.21,"P", "W",
+                312.21, 312.21, "SJH",null);
+        ArrayList<String> test=databaseConnection.displayAssets();
+        for (String s : test) {
+            System.out.println(s);
+        }
+        System.out.println("AFTER DELETE");
+        databaseConnection.deleteAsset(1222);
+        test=databaseConnection.displayAssets();
+        for (String s : test) {
+            System.out.println(s);
+        }
     }
 }
