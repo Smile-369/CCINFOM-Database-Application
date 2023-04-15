@@ -100,7 +100,9 @@ public class DatabaseConnection {
 
     public void disposeAsset(int assetID) {
         try {
-            String query = "UPDATE assets SET status='D' WHERE enclosing_asset= "+assetID+ " OR asset_id=" + assetID;
+            String query = "UPDATE assets SET status='D' WHERE asset_id=" + assetID;
+            statement.executeUpdate(query);
+            query="UPDATE  assets SET enclosing_asset= null WHERE enclosing_asset ="+assetID;
             statement.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
