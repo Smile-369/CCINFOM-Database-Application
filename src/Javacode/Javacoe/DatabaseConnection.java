@@ -94,8 +94,24 @@ public class DatabaseConnection {
             System.err.println("SQLException: " + e.getMessage());
         }
     }
-    public void updateAsset(int assetID){
-        String query ="";
+    public void updateAsset(int assetId, String assetName, String assetDescription, Date acquisitionDate,
+                            boolean forRent, double assetValue, String typeAsset, String status,
+                            double locLatitude, double locLongitude, String hoaName, int enclosingAsset) throws SQLException {
+        String query = "UPDATE assets SET asset_id=?, asset_name=?, asset_description=?, acquisition_date=?, forrent=?," +
+                " asset_value=?, type_asset=?, status=?, loc_lattitude=?, loc_longiture=?, hoa_name=?, enclosing_asset=? ";
+        PreparedStatement pstmt = connection.prepareStatement(query);
+        pstmt.setInt(1, assetId);
+        pstmt.setString(2, assetName);
+        pstmt.setString(3, assetDescription);
+        pstmt.setDate(4, new java.sql.Date(acquisitionDate.getTime()));
+        pstmt.setBoolean(5, forRent);
+        pstmt.setDouble(6, assetValue);
+        pstmt.setString(7, typeAsset);
+        pstmt.setString(8, status);
+        pstmt.setDouble(9, locLatitude);
+        pstmt.setDouble(10, locLongitude);
+        pstmt.setString(11, hoaName);
+        pstmt.setInt(12, enclosingAsset);
     }
 
     public void disposeAsset(int assetID) {
