@@ -9,7 +9,7 @@ public class DatabaseConnection {
     public DatabaseConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/hoadb";
+            String url = "jdbc:mysql://localhost:3306/HOADB";
             connection = DriverManager.getConnection(url, "root", "12345678");
             statement = connection.createStatement();
         } catch (Exception e) {
@@ -248,7 +248,7 @@ public class DatabaseConnection {
             pstmt.setInt(3, transHOId);
             pstmt.setString(4, transPos);
             pstmt.setString(5, transElecDate);
-            pstmt.executeUpdate(query1);
+            pstmt.executeUpdate();
 
             String query2 = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
                     " rental_amount, discount, status, inspection_details, assessed_value, accept_hoid," +
@@ -265,7 +265,7 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.executeUpdate(query2);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
