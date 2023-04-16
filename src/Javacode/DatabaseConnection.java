@@ -368,29 +368,5 @@ public class DatabaseConnection {
         return transactionList;
     }
     public static void main(String[] args){
-        DatabaseConnection dbcon = new DatabaseConnection();
-        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
-                650.00, 100.0, "R", null, 0.00,
-                9011, "Auditor", "2022-12-01", 9010,
-                "Treasurer", "2022-12-01", null);
-//        DatabaseConnection databaseConnection= new DatabaseConnection();
-//        databaseConnection.insertToAsset(121, "fuck", "String assetDescription", "2023-04-16",
-//                true, 312.21,"P", "W",
-//                312.21, 312.21, "SJH");
-//        ArrayList<String> test=databaseConnection.displayAllAssets();
-//        int counter=0;
-//        for (String s : test) {
-//            System.out.println(counter+" "+s);
-//            counter++;
-//        }
-//        System.out.println("AFTER DELETE");
-//        databaseConnection.deleteAsset(121);
-//        test=databaseConnection.displayAllAssets();
-//        for (String s : test) {
-//            System.out.println(s);
-//        }
-//        DatabaseConnection dbcon = new DatabaseConnection();
-//        dbcon.deleteRental(5008, "2022-12-24", 9004,
-//                "President", "2022-12-01");
     }
 }
