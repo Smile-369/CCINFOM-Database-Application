@@ -235,14 +235,26 @@ public class DatabaseConnection {
 
     public void recordRental(int assetId, String reserveDate, int residentId, double rentAmt,
                              double discount, String status, int acceptHOId, String acceptPos,
-                             String acceptElecDate, String returnDate, String transDate,
-                             int transHOId, String transPos, Date transElecDate) {
+                             String acceptElecDate, String transDate,
+                             int transHOId, String transPos, String transElecDate) {
         try {
-            String query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
+            String query = "INSERT INTO asset_transactions (asset_id, transaction_date, trans_hoid," +
+                    " trans_position, trans_electiondate, isDeleted, approval_hoid, approval_position," +
+                    " approval_electiondate, ornum, transaction_type) " +
+                    "VALUES (?, ?, ?, ?, ?, FALSE, NULL, NULL, NULL, NULL, 'R')";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, assetId);
+            pstmt.setString(2, transDate);
+            pstmt.setInt(3, transHOId);
+            pstmt.setString(4, transPos);
+            pstmt.setString(5, transElecDate);
+            pstmt.executeUpdate();
+
+            query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
                     " rental_amount, discount, status, inspection_details, assessed_value, accept_hoid," +
                     " accept_position, accept_electiondate, return_date) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, NULL)";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, transDate);
             pstmt.setString(3, reserveDate);
@@ -253,18 +265,6 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.executeUpdate();
-
-            query = "INSERT INTO asset_transactions (asset_id, transaction_date, trans_hoid," +
-                    " trans_position, trans_electiondate, isDeleted, approval_hoid, approval_position," +
-                    " approval_electiondate, ornum, transaction_type) " +
-                    "VALUES (?, ?, ?, ?, ?, FALSE, NULL, NULL, NULL, NULL, 'R')";
-            pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, assetId);
-            pstmt.setString(2, transDate);
-            pstmt.setInt(3, transHOId);
-            pstmt.setString(4, transPos);
-            pstmt.setDate(5, new java.sql.Date(transElecDate.getTime()));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -287,11 +287,20 @@ public class DatabaseConnection {
                              int transHOId, String transPos, String transElecDate, String transDate,
                              String returnDate) {
         try {
-            String query = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
+            String query = "UPDATE asset_transactions SET trans_hoid=?, " +
+                    "trans_position=?, trans_electiondate=? " +
+                    "WHERE asset_id=" + assetId + " AND transaction_date='" + transDate + "'";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, transHOId);
+            pstmt.setString(2, transPos);
+            pstmt.setString(3, transElecDate);
+            statement.executeUpdate(query);
+
+            query = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
                     "accept_hoid=?, accept_position=?, acccept_electiondate=?, return_date=? " +
                     "WHERE asset_id=" + assetId + " AND rental_date='" + rentDate + "'";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt = connection.prepareStatement(query);
             pstmt.setString(1, reserveDate);
             pstmt.setInt(2, residentId);
             pstmt.setDouble(3, rentAmt);
@@ -303,15 +312,6 @@ public class DatabaseConnection {
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
             pstmt.setString(11, returnDate);
-            statement.executeUpdate(query);
-
-            query = "UPDATE asset_transactions SET trans_hoid=?, " +
-                    "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date='" + transDate + "'";
-            pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, transHOId);
-            pstmt.setString(2, transPos);
-            pstmt.setString(3, transElecDate);
             statement.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -349,5 +349,11 @@ public class DatabaseConnection {
         for (String s : test) {
             System.out.println(s);
         }
+
+        DatabaseConnection dbCon = new DatabaseConnection();
+        dbCon.recordRental(5010, "2023-04-15", 9017, 50.00,
+                            0.00, "O", 9010, "Treasurer",
+                            "2022-12-01", "2023-04-18", 9009,
+                            "Treasurer", "2022-12-01");
     }
 }
