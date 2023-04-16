@@ -261,8 +261,7 @@ public class DatabaseConnection {
     public void updateRental(String assetId, String rentDate, String reserveDate, int residentId,
                              double rentAmt, double discount, String status, String inspectDetails,
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
-                             String returnDate, int transHOId, String transPos, String transElecDate,
-                             String transDate) {
+                             int transHOId, String transPos, String transElecDate, String transDate) {
         try {
             String query = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
@@ -279,7 +278,6 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.setString(11, returnDate);
             statement.executeUpdate(query);
 
             query = "UPDATE asset_transactions SET trans_hoid=?, " +
