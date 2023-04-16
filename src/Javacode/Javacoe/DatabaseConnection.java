@@ -16,18 +16,20 @@ public class DatabaseConnection {
             System.err.println("Exception: " + e.getMessage());
         }
     }
-    public void insertToAsset(int assetId, String assetName, String assetDescription, Date acquisitionDate,
+    public void insertToAsset(int assetId, String assetName, String assetDescription, String acquisitionDate,
                               boolean forRent, double assetValue, String typeAsset, String status,
                               double locLatitude, double locLongitude, String hoaName, String enclosingAsset) {
+
         try {
             String query = "INSERT INTO assets (asset_id, asset_name, asset_description, acquisition_date, forrent," +
                     " asset_value, type_asset, status, loc_lattitude, loc_longiture, hoa_name, enclosing_asset) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, assetName);
             pstmt.setString(3, assetDescription);
-            pstmt.setDate(4, new java.sql.Date(acquisitionDate.getTime()));
+            pstmt.setString(4,acquisitionDate);
             pstmt.setBoolean(5, forRent);
             pstmt.setDouble(6, assetValue);
             pstmt.setString(7, typeAsset);
@@ -41,7 +43,7 @@ public class DatabaseConnection {
             System.err.println("SQLException: " + e.getMessage());
         }
     }
-    public void insertToAsset(int assetId, String assetName, String assetDescription, Date acquisitionDate,
+    public void insertToAsset(int assetId, String assetName, String assetDescription, String acquisitionDate,
                               boolean forRent, double assetValue, String typeAsset, String status,
                               double locLatitude, double locLongitude, String hoaName) {
         try {
@@ -52,7 +54,7 @@ public class DatabaseConnection {
             pstmt.setInt(1, assetId);
             pstmt.setString(2, assetName);
             pstmt.setString(3, assetDescription);
-            pstmt.setDate(4, new java.sql.Date(acquisitionDate.getTime()));
+            pstmt.setString(4, acquisitionDate);
             pstmt.setBoolean(5, forRent);
             pstmt.setDouble(6, assetValue);
             pstmt.setString(7, typeAsset);
@@ -259,7 +261,7 @@ public class DatabaseConnection {
     }
     public static void main(String[] args) {
         DatabaseConnection databaseConnection= new DatabaseConnection();
-        databaseConnection.insertToAsset(1242, "chair", "String assetDescription", new Date(2023,4,15),
+        databaseConnection.insertToAsset(12, "chair", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH");
         ArrayList<String> test=databaseConnection.displayEnclosingAssets();
