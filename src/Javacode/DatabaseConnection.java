@@ -1,4 +1,4 @@
-package Javacode.Javacoe;
+package Javacode;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -387,7 +387,7 @@ public class DatabaseConnection {
         databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH",5001);
-        ArrayList<String> test=databaseConnection.displayRentals(5010);
+        ArrayList<String> test=databaseConnection.displayTransactions(5010);
         int counter=0;
         for (String s : test) {
             System.out.println(counter+" "+s);
