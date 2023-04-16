@@ -286,30 +286,19 @@ public class DatabaseConnection {
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
                              int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
-//            String query1 = "UPDATE asset_transactions SET trans_hoid=?, " +
-//                    "trans_position=?, trans_electiondate=? " +
-//                    "WHERE asset_id=" + assetId + " AND transaction_date=" + rentDate;
-//            PreparedStatement pstmt = connection.prepareStatement(query1);
-//            pstmt.setInt(1, transHOId);
-//            pstmt.setString(2, transPos);
-//            pstmt.setString(3, transElecDate);
-//            pstmt.executeUpdate();
 
-            String query2 = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
+
+            String query2 = "UPDATE asset_rentals SET reservation_date=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
-                    "return_date=? " +
-                    "WHERE asset_id=" + assetId + " AND rental_date=" + rentDate;
+                    " return_date=? " +
+                    "WHERE asset_id=" + assetId + " AND rental_date= '" + rentDate+"'";
             PreparedStatement pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
-            //pstmt.setInt(2, residentId);
             pstmt.setDouble(2, rentAmt);
             pstmt.setDouble(3, discount);
             pstmt.setString(4, status);
             pstmt.setString(5, inspectDetails);
             pstmt.setDouble(6, assessedVal);
-//            pstmt.setInt(8, acceptHOId);
-//            pstmt.setString(9, acceptPos);
-//            pstmt.setString(10, acceptElecDate);
             pstmt.setString(7, returnDate);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -325,7 +314,7 @@ public class DatabaseConnection {
                     "AND transaction_date= '" + rentDate +"'";
             System.out.println(query);
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
