@@ -8,7 +8,7 @@ public class DatabaseConnection {
     Statement statement;
     public DatabaseConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hoadb";
             connection = DriverManager.getConnection(url, "root", "12345678");
             statement = connection.createStatement();
@@ -66,19 +66,24 @@ public class DatabaseConnection {
         }
     }
 
-    public ArrayList<String> displayAssets() {
+    public ArrayList<String> displayAllAssets() {
         ArrayList<String> assetList = new ArrayList<>();
         try {
-            String query = "SELECT asset_id, asset_name, asset_description, asset_value, hoa_name,status FROM assets";
+            String query = "SELECT * FROM assets";
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
-                String assetId = rs.getString("asset_id");
+                String assetId1 = String.valueOf(rs.getInt("asset_id"));
                 String assetName = rs.getString("asset_name");
                 String assetDescription = rs.getString("asset_description");
                 double assetValue = rs.getDouble("asset_value");
+                double locLatitute= rs.getDouble("loc_lattitude");
+                double locLongtitude= rs.getDouble("loc_longiture");
                 String hoaName = rs.getString("hoa_name");
                 String status = rs.getString("status");
-                assetList.add(assetId + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", "+ status);
+                String forrent= rs.getString("forrent");
+                String typeAsset = rs.getString("type_asset");
+                Date aquisitionDate= rs.getDate("acquisition_date");
+                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -86,9 +91,48 @@ public class DatabaseConnection {
         return assetList;
     }
 
+    public ArrayList<String> displayAssets(int assetId) {
+        ArrayList<String> assetList = new ArrayList<>();
+        try {
+            String query = "SELECT *FROM assets WHERE asset_id = "+assetId;
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String assetId1 = String.valueOf(rs.getInt("asset_id"));
+                String assetName = rs.getString("asset_name");
+                String assetDescription = rs.getString("asset_description");
+                double assetValue = rs.getDouble("asset_value");
+                double locLatitute= rs.getDouble("loc_lattitude");
+                double locLongtitude= rs.getDouble("loc_longiture");
+                String hoaName = rs.getString("hoa_name");
+                String status = rs.getString("status");
+                String forrent= rs.getString("forrent");
+                String typeAsset = rs.getString("type_asset");
+                Date aquisitionDate= rs.getDate("acquisition_date");
+                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return assetList;
+    }
+    public ArrayList<String> displayNonDisposed(){
+        ArrayList<String> assetList = new ArrayList<>();
+        try{
+            String query = "SELECT asset_id FROM assets WHERE status!='S'";
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String assetId = String.valueOf(rs.getInt("asset_id"));
+                assetList.add(assetId);
+            }
+        }catch (SQLException e){
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return assetList;
+    }
+
     public void deleteAsset(int assetID) {
         try {
-            String query = "DELETE FROM assets WHERE status !='D' AND enclosing_asset IS null AND asset_id=" + assetID;
+            String query = "DELETE FROM assets WHERE enclosing_asset IS null AND asset_id=" + assetID;
             statement.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -201,15 +245,15 @@ public class DatabaseConnection {
         databaseConnection.insertToAsset(1222, "chair", "String assetDescription", new Date(2023,4,15),
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH");
-        ArrayList<String> test=databaseConnection.displayAssets();
+        ArrayList<String> test=databaseConnection.displayAssets(1222);
         for (String s : test) {
             System.out.println(s);
         }
-        System.out.println("AFTER DELETE");
-        databaseConnection.deleteAsset(1222);
-        test=databaseConnection.displayAssets();
-        for (String s : test) {
-            System.out.println(s);
-        }
+//        System.out.println("AFTER DELETE");
+//        databaseConnection.deleteAsset(1222);
+//        test=databaseConnection.displayAssets();
+//        for (String s : test) {
+//            System.out.println(s);
+//        }
     }
 }
