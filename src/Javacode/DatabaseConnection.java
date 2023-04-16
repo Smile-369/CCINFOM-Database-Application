@@ -286,19 +286,18 @@ public class DatabaseConnection {
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
                              int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
-            String query1 = "UPDATE asset_transactions SET trans_hoid=?, " +
-                    "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date='" + rentDate + "'";
+            String query1 = "UPDATE asset_transactions SET trans_hoid= ?, trans_position= ?, trans_electiondate= ? WHERE asset_id = "+ assetId +" AND transaction_date=" + rentDate;
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
             pstmt.setString(3, transElecDate);
-            statement.executeUpdate(query1);
+            pstmt.executeUpdate(query1);
 
             String query2 = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
                     "accept_hoid=?, accept_position=?, accept_electiondate=?, return_date=? " +
-                    "WHERE asset_id=" + assetId + " AND rental_date='" + rentDate + "'";
+                    "WHERE asset_id=" + assetId + " AND rental_date=" + rentDate;
+
             pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
             pstmt.setInt(2, residentId);
@@ -311,7 +310,7 @@ public class DatabaseConnection {
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
             pstmt.setString(11, returnDate);
-            statement.executeUpdate(query2);
+            pstmt.executeUpdate(query2);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -382,22 +381,10 @@ public class DatabaseConnection {
         return transactionList;
     }
     public static void main(String[] args){
-        DatabaseConnection databaseConnection= new DatabaseConnection();
-        databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
-                true, 312.21,"P", "W",
-                312.21, 312.21, "SJH",5001);
-        ArrayList<String> test=databaseConnection.displayTransactions(5010);
-        int counter=0;
-        for (String s : test) {
-            System.out.println(counter+" "+s);
-            counter++;
-        }
-        System.out.println("AFTER DELETE");
-        databaseConnection.deleteAsset(12);
-        test=databaseConnection.displayAllAssets();
-        for (String s : test) {
-            System.out.println(s);
-        }
-
+        DatabaseConnection dbcon = new DatabaseConnection();
+        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
+                650.00, 100.0, "R", null, 0.00,
+                9011, "Auditor", "2022-12-01", 9010,
+                "Treasurer", "2022-12-01", null);
     }
 }

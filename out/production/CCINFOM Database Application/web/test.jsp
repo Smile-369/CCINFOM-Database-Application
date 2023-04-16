@@ -1,6 +1,6 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="Javacode.Javacoe.DatabaseConnection" %>
+<%@ page import="Javacode.DatabaseConnection" %>
 
 <%
     DatabaseConnection dbConn = new DatabaseConnection();
