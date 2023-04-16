@@ -66,6 +66,21 @@ public class DatabaseConnection {
         }
     }
 
+    public ArrayList<String> displayEnclosingAssets(){
+        ArrayList<String> assetList = new ArrayList<>();
+        try {
+            String query = "SELECT DISTINCT enclosing_asset FROM assets";
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String enclosingasset= rs.getString("enclosing_asset");
+                assetList.add(enclosingasset);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return assetList;
+    }
+
     public ArrayList<String> displayAllAssets() {
         ArrayList<String> assetList = new ArrayList<>();
         try {
@@ -83,7 +98,8 @@ public class DatabaseConnection {
                 String forrent= rs.getString("forrent");
                 String typeAsset = rs.getString("type_asset");
                 Date aquisitionDate= rs.getDate("acquisition_date");
-                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate);
+                String enclosingasset= rs.getString("enclosing_asset");
+                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate+", "+ enclosingasset);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -108,7 +124,8 @@ public class DatabaseConnection {
                 String forrent= rs.getString("forrent");
                 String typeAsset = rs.getString("type_asset");
                 Date aquisitionDate= rs.getDate("acquisition_date");
-                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate);
+                String enclosingasset= rs.getString("enclosing_asset");
+                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate+", "+ enclosingasset);
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -242,10 +259,10 @@ public class DatabaseConnection {
     }
     public static void main(String[] args) {
         DatabaseConnection databaseConnection= new DatabaseConnection();
-        databaseConnection.insertToAsset(1222, "chair", "String assetDescription", new Date(2023,4,15),
+        databaseConnection.insertToAsset(1242, "chair", "String assetDescription", new Date(2023,4,15),
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH");
-        ArrayList<String> test=databaseConnection.displayAssets(1222);
+        ArrayList<String> test=databaseConnection.displayEnclosingAssets();
         for (String s : test) {
             System.out.println(s);
         }
