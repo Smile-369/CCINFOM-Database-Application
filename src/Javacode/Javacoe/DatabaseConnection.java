@@ -334,6 +334,31 @@ public class DatabaseConnection {
             System.err.println("SQLException: " + e.getMessage());
         }
     }
+    public ArrayList<String> displayRentals(int assetId) {
+        ArrayList<String> rentalList = new ArrayList<>();
+        try {
+            String query = "SELECT *FROM asset_rentals WHERE asset_id = "+assetId;
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                rentalList.add(String.valueOf(rs.getInt("asset_id")));
+                rentalList.add(String.valueOf(rs.getDate("rental_date")));
+                rentalList.add(String.valueOf(rs.getDate("reservation_date")));
+                rentalList.add(String.valueOf(rs.getInt("resident_id")));
+                rentalList.add(String.valueOf(rs.getDouble("rental_amount")));
+                rentalList.add(String.valueOf(rs.getDouble("discount")));
+                rentalList.add(rs.getString("status"));
+                rentalList.add(rs.getString("inspection_details"));
+                rentalList.add(String.valueOf(rs.getDouble("assessed_value")));
+                rentalList.add(String.valueOf(rs.getInt("accept_hoid")));
+                rentalList.add(rs.getString("accept_position"));
+                rentalList.add(String.valueOf(rs.getDate("accept_electiondate")));
+                rentalList.add(String.valueOf(rs.getDate("return_date")));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return rentalList;
+    }
     public static void main(String[] args){
         DatabaseConnection databaseConnection= new DatabaseConnection();
         databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
