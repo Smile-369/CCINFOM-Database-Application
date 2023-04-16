@@ -322,7 +322,7 @@ public class DatabaseConnection {
         try {
             String query = "UPDATE asset_transactions " +
                     "SET isDeleted=TRUE WHERE asset_id=" + assetId + " " +
-                    "AND rental_date= " + rentDate ;
+                    "AND transaction_date= '" + rentDate +"'";
             System.out.println(query);
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.executeUpdate(query);
