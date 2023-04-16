@@ -115,19 +115,18 @@ public class DatabaseConnection {
             String query = "SELECT *FROM assets WHERE asset_id = "+assetId;
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
-                String assetId1 = String.valueOf(rs.getInt("asset_id"));
-                String assetName = rs.getString("asset_name");
-                String assetDescription = rs.getString("asset_description");
-                double assetValue = rs.getDouble("asset_value");
-                double locLatitute= rs.getDouble("loc_lattitude");
-                double locLongtitude= rs.getDouble("loc_longiture");
-                String hoaName = rs.getString("hoa_name");
-                String status = rs.getString("status");
-                String forrent= rs.getString("forrent");
-                String typeAsset = rs.getString("type_asset");
-                Date aquisitionDate= rs.getDate("acquisition_date");
-                String enclosingasset= rs.getString("enclosing_asset");
-                assetList.add(assetId1 + ", " + assetName + ", " + assetDescription + ", " + assetValue + ", " + hoaName+", " + locLatitute+", " + locLongtitude+", "+ status+", "+ forrent+", "+ typeAsset+", "+ aquisitionDate+", "+ enclosingasset);
+                assetList.add(String.valueOf(rs.getInt("asset_id")));
+                assetList.add(rs.getString("asset_name"));
+                assetList.add(rs.getString("asset_description"));
+                assetList.add(String.valueOf(rs.getDouble("asset_value")));
+                assetList.add(String.valueOf(rs.getDouble("loc_lattitude")));
+                assetList.add(String.valueOf(rs.getDouble("loc_longiture")));
+                assetList.add(rs.getString("hoa_name"));
+                assetList.add(rs.getString("status"));
+                assetList.add(rs.getString("forrent"));
+                assetList.add(rs.getString("type_asset"));
+                assetList.add(String.valueOf(rs.getDate("acquisition_date")));
+                assetList.add(rs.getString("enclosing_asset"));
             }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
