@@ -206,9 +206,9 @@ public class DatabaseConnection {
         }
     }
 
-    public void recordRental(int assetId, Date rentDate, Date reserveDate, int residentId, double rentAmt,
+    public void recordRental(int assetId, String rentDate, String reserveDate, int residentId, double rentAmt,
                              double discount, String status, String inspectDetails, double assessedVal,
-                             int acceptHOId, String acceptPos, Date acceptElecDate, Date returnDate,
+                             int acceptHOId, String acceptPos, String acceptElecDate, String returnDate,
                              Date transDate, int transHOId, String transPos, Date transElecDate) {
         try {
             String query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
@@ -217,8 +217,8 @@ public class DatabaseConnection {
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, assetId);
-            pstmt.setDate(2, new java.sql.Date(rentDate.getTime()));
-            pstmt.setDate(3, new java.sql.Date(reserveDate.getTime()));
+            pstmt.setString(2, rentDate);
+            pstmt.setString(3, reserveDate);
             pstmt.setInt(4, residentId);
             pstmt.setDouble(5, rentAmt);
             pstmt.setDouble(6, discount);
@@ -227,8 +227,8 @@ public class DatabaseConnection {
             pstmt.setDouble(9, assessedVal);
             pstmt.setInt(10, acceptHOId);
             pstmt.setString(11, acceptPos);
-            pstmt.setDate(12, new java.sql.Date(acceptElecDate.getTime()));
-            pstmt.setDate(13, new java.sql.Date(returnDate.getTime()));
+            pstmt.setString(12, acceptElecDate);
+            pstmt.setString(13, returnDate);
             pstmt.executeUpdate();
 
             query = "INSERT INTO asset_transactions (asset_id, transaction_date, trans_hoid," +
@@ -295,7 +295,7 @@ public class DatabaseConnection {
         }
     }
 
-    public void deleteRental(String assetId, int approvHOId, String approvPos,
+    public void deleteRental(int assetId, int approvHOId, String approvPos,
                              Date approvElecDate) {
         try {
             String query = "UPDATE asset_transactions " +
