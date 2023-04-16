@@ -151,9 +151,12 @@ public class DatabaseConnection {
 
     public void deleteAsset(int assetID) {
         try {
-            String query = "DELETE FROM assets WHERE enclosing_asset IS null AND asset_id NOT IN ( SELECT asset_id\n" +
-                    "                                             FROM asset_rentals WHERE status = 'O') AND asset_id=" + assetID;
-            statement.executeUpdate(query);
+            String query= "SELECT asset_id FROM asset_rentals WHERE asset_id = "+ assetID;
+            ResultSet rs = statement.executeQuery(query);
+            if(!rs.next()){
+                query = "DELETE FROM assets WHERE enclosing_asset IS null AND sset_id=" + assetID;
+                statement.executeUpdate(query);
+            }
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
