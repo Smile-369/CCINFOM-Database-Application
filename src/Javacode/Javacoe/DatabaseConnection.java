@@ -154,7 +154,7 @@ public class DatabaseConnection {
             String query= "SELECT asset_id FROM asset_rentals WHERE asset_id = "+ assetID;
             ResultSet rs = statement.executeQuery(query);
             if(!rs.next()){
-                query = "DELETE FROM assets WHERE enclosing_asset IS null AND sset_id=" + assetID;
+                query = "DELETE FROM assets WHERE enclosing_asset IS null AND asset_id=" + assetID;
                 statement.executeUpdate(query);
             }
         } catch (SQLException e) {
@@ -318,15 +318,15 @@ public class DatabaseConnection {
         databaseConnection.insertToAsset(12, "chair", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH");
-        ArrayList<String> test=databaseConnection.displayEnclosingAssets();
+        ArrayList<String> test=databaseConnection.displayAllAssets();
         for (String s : test) {
             System.out.println(s);
         }
-//        System.out.println("AFTER DELETE");
-//        databaseConnection.deleteAsset(1222);
-//        test=databaseConnection.displayAssets();
-//        for (String s : test) {
-//            System.out.println(s);
-//        }
+        System.out.println("AFTER DELETE");
+        databaseConnection.deleteAsset(12);
+        test=databaseConnection.displayAllAssets();
+        for (String s : test) {
+            System.out.println(s);
+        }
     }
 }
