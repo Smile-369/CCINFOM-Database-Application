@@ -375,10 +375,5 @@ public class DatabaseConnection {
             System.out.println(s);
         }
 
-        DatabaseConnection dbCon = new DatabaseConnection();
-        dbCon.recordRental(5002, "2023-04-15", 9017, 50.00,
-                            0.00, "O", 9010, "Treasurer",
-                            "2022-12-01", "2023-04-18", 9010,
-                            "Treasurer", "2023-01-10");
     }
 }
