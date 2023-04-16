@@ -297,7 +297,7 @@ public class DatabaseConnection {
 
             String query2 = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
-                    "accept_hoid=?, accept_position=?, acccept_electiondate=?, return_date=? " +
+                    "accept_hoid=?, accept_position=?, accept_electiondate=?, return_date=? " +
                     "WHERE asset_id=" + assetId + " AND rental_date='" + rentDate + "'";
             pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
