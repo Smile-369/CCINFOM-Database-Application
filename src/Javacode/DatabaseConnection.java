@@ -238,23 +238,23 @@ public class DatabaseConnection {
                              String acceptElecDate, String transDate,
                              int transHOId, String transPos, String transElecDate) {
         try {
-            String query = "INSERT INTO asset_transactions (asset_id, transaction_date, trans_hoid," +
+            String query1 = "INSERT INTO asset_transactions (asset_id, transaction_date, trans_hoid," +
                     " trans_position, trans_electiondate, isDeleted, approval_hoid, approval_position," +
                     " approval_electiondate, ornum, transaction_type) " +
                     "VALUES (?, ?, ?, ?, ?, FALSE, NULL, NULL, NULL, NULL, 'R')";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, transDate);
             pstmt.setInt(3, transHOId);
             pstmt.setString(4, transPos);
             pstmt.setString(5, transElecDate);
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(query1);
 
-            query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
+            String query2 = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
                     " rental_amount, discount, status, inspection_details, assessed_value, accept_hoid," +
                     " accept_position, accept_electiondate, return_date) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, NULL)";
-            pstmt = connection.prepareStatement(query);
+            pstmt = connection.prepareStatement(query2);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, transDate);
             pstmt.setString(3, reserveDate);
@@ -265,7 +265,7 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(query2);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -286,20 +286,20 @@ public class DatabaseConnection {
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
                              int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
-            String query = "UPDATE asset_transactions SET trans_hoid=?, " +
+            String query1 = "UPDATE asset_transactions SET trans_hoid=?, " +
                     "trans_position=?, trans_electiondate=? " +
                     "WHERE asset_id=" + assetId + " AND transaction_date='" + rentDate + "'";
-            PreparedStatement pstmt = connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
             pstmt.setString(3, transElecDate);
-            statement.executeUpdate(query);
+            statement.executeUpdate(query1);
 
-            query = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
+            String query2 = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
                     "accept_hoid=?, accept_position=?, acccept_electiondate=?, return_date=? " +
                     "WHERE asset_id=" + assetId + " AND rental_date='" + rentDate + "'";
-            pstmt = connection.prepareStatement(query);
+            pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
             pstmt.setInt(2, residentId);
             pstmt.setDouble(3, rentAmt);
@@ -311,7 +311,7 @@ public class DatabaseConnection {
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
             pstmt.setString(11, returnDate);
-            statement.executeUpdate(query);
+            statement.executeUpdate(query2);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
