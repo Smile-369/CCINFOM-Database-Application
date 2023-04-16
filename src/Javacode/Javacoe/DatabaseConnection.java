@@ -157,6 +157,20 @@ public class DatabaseConnection {
             System.err.println("SQLException: " + e.getMessage());
         }
     }
+    public ArrayList<String> displayRentableAssets(){
+        ArrayList<String> assetList = new ArrayList<>();
+        try{
+            String query = "SELECT asset_id FROM assets WHERE forrent=true";
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                String assetId = String.valueOf(rs.getInt("asset_id"));
+                assetList.add(assetId);
+            }
+        }catch (SQLException e){
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return assetList;
+    }
     public void updateAsset(int assetId, String assetName, String assetDescription, Date acquisitionDate,
                             boolean forRent, double assetValue, String typeAsset, String status,
                             double locLatitude, double locLongitude, String hoaName, int enclosingAsset) throws SQLException {
@@ -211,6 +225,7 @@ public class DatabaseConnection {
             pstmt.setDate(12, new java.sql.Date(acceptElecDate.getTime()));
             pstmt.setDate(13, new java.sql.Date(returnDate.getTime()));
             pstmt.executeUpdate();
+
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
