@@ -10,7 +10,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hoadb";
-            connection = DriverManager.getConnection(url, "root", "12345678");
+            connection = DriverManager.getConnection(url, "root", "mySQLserver8.0!");
             statement = connection.createStatement();
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
@@ -248,13 +248,13 @@ public class DatabaseConnection {
             pstmt.setInt(3, transHOId);
             pstmt.setString(4, transPos);
             pstmt.setString(5, transElecDate);
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(query);
 
-            query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
+            String query2 = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
                     " rental_amount, discount, status, inspection_details, assessed_value, accept_hoid," +
                     " accept_position, accept_electiondate, return_date) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, NULL)";
-            pstmt = connection.prepareStatement(query);
+            pstmt = connection.prepareStatement(query2);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, transDate);
             pstmt.setString(3, reserveDate);
@@ -265,7 +265,7 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.executeUpdate();
+            pstmt.executeUpdate(query2);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -284,12 +284,11 @@ public class DatabaseConnection {
     public void updateRental(String assetId, String rentDate, String reserveDate, int residentId,
                              double rentAmt, double discount, String status, String inspectDetails,
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
-                             int transHOId, String transPos, String transElecDate, String transDate,
-                             String returnDate) {
+                             int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
             String query = "UPDATE asset_transactions SET trans_hoid=?, " +
                     "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date='" + transDate + "'";
+                    "WHERE asset_id=" + assetId + " AND transaction_date='" + rentDate + "'";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
@@ -335,6 +334,7 @@ public class DatabaseConnection {
         }
     }
     public static void main(String[] args){
+        /*
         DatabaseConnection databaseConnection= new DatabaseConnection();
         databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
@@ -348,12 +348,13 @@ public class DatabaseConnection {
         test=databaseConnection.displayAllAssets();
         for (String s : test) {
             System.out.println(s);
-        }
+        }*/
 
         DatabaseConnection dbCon = new DatabaseConnection();
-        dbCon.recordRental(5010, "2023-04-15", 9017, 50.00,
-                            0.00, "O", 9010, "Treasurer",
-                            "2022-12-01", "2023-04-18", 9009,
-                            "Treasurer", "2022-12-01");
+        dbCon.updateRental("5010", "2022-12-23", "2023-04-15", 9017,
+                            50.00, 0.00, "N", "Some damage",
+                            0.00, 9010, "Treasurer",
+                            "2022-12-01", 9011, "Auditor",
+                             "2022-12-01", "2023-04-20");
     }
 }
