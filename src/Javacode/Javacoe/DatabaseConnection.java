@@ -18,7 +18,7 @@ public class DatabaseConnection {
     }
     public void insertToAsset(int assetId, String assetName, String assetDescription, String acquisitionDate,
                               boolean forRent, double assetValue, String typeAsset, String status,
-                              double locLatitude, double locLongitude, String hoaName, String enclosingAsset) {
+                              double locLatitude, double locLongitude, String hoaName, int enclosingAsset) {
 
         try {
             String query = "INSERT INTO assets (asset_id, asset_name, asset_description, acquisition_date, forrent," +
@@ -37,7 +37,7 @@ public class DatabaseConnection {
             pstmt.setDouble(9, locLatitude);
             pstmt.setDouble(10, locLongitude);
             pstmt.setString(11, hoaName);
-            pstmt.setString(12, enclosingAsset);
+            pstmt.setInt(12, enclosingAsset);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
@@ -179,7 +179,7 @@ public class DatabaseConnection {
 
     public void disposeAsset(int assetID) {
         try {
-            String query = "UPDATE assets SET status='D' WHERE asset_id=" + assetID;
+            String query = "UPDATE assets SET status='S' WHERE asset_id=" + assetID;
             statement.executeUpdate(query);
             query="UPDATE  assets SET enclosing_asset= null WHERE enclosing_asset ="+assetID;
             statement.executeUpdate(query);
