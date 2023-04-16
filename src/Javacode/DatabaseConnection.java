@@ -286,32 +286,21 @@ public class DatabaseConnection {
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
                              int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
-            String query1 = "UPDATE asset_transactions SET trans_hoid=?, " +
-                    "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date=" + rentDate;
-            PreparedStatement pstmt = connection.prepareStatement(query1);
-            pstmt.setInt(1, transHOId);
-            pstmt.setString(2, transPos);
-            pstmt.setString(3, transElecDate);
-            pstmt.executeUpdate(query1);
 
-            String query2 = "UPDATE asset_rentals SET reservation_date=?, resident_id=?, " +
+
+            String query2 = "UPDATE asset_rentals SET reservation_date=?, " +
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
-                    "accept_hoid=?, accept_position=?, accept_electiondate=?, return_date=? " +
-                    "WHERE asset_id=" + assetId + " AND rental_date=" + rentDate;
-            pstmt = connection.prepareStatement(query2);
+                    " return_date=? " +
+                    "WHERE asset_id=" + assetId + " AND rental_date= '" + rentDate+"'";
+            PreparedStatement pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
-            pstmt.setInt(2, residentId);
-            pstmt.setDouble(3, rentAmt);
-            pstmt.setDouble(4, discount);
-            pstmt.setString(5, status);
-            pstmt.setString(6, inspectDetails);
-            pstmt.setDouble(7, assessedVal);
-            pstmt.setInt(8, acceptHOId);
-            pstmt.setString(9, acceptPos);
-            pstmt.setString(10, acceptElecDate);
-            pstmt.setString(11, returnDate);
-            pstmt.executeUpdate(query2);
+            pstmt.setDouble(2, rentAmt);
+            pstmt.setDouble(3, discount);
+            pstmt.setString(4, status);
+            pstmt.setString(5, inspectDetails);
+            pstmt.setDouble(6, assessedVal);
+            pstmt.setString(7, returnDate);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -379,11 +368,11 @@ public class DatabaseConnection {
         return transactionList;
     }
     public static void main(String[] args){
-//        DatabaseConnection dbcon = new DatabaseConnection();
-//        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
-//                650.00, 100.0, "R", null, 0.00,
-//                9011, "Auditor", "2022-12-01", 9010,
-//                "Treasurer", "2022-12-01", null);
+        DatabaseConnection dbcon = new DatabaseConnection();
+        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
+                650.00, 100.0, "R", null, 0.00,
+                9011, "Auditor", "2022-12-01", 9010,
+                "Treasurer", "2022-12-01", null);
 //        DatabaseConnection databaseConnection= new DatabaseConnection();
 //        databaseConnection.insertToAsset(121, "fuck", "String assetDescription", "2023-04-16",
 //                true, 312.21,"P", "W",
@@ -400,8 +389,8 @@ public class DatabaseConnection {
 //        for (String s : test) {
 //            System.out.println(s);
 //        }
-        DatabaseConnection dbcon = new DatabaseConnection();
-        dbcon.deleteRental(5008, "2022-12-24", 9004,
-                "President", "2022-12-01");
+//        DatabaseConnection dbcon = new DatabaseConnection();
+//        dbcon.deleteRental(5008, "2022-12-24", 9004,
+//                "President", "2022-12-01");
     }
 }
