@@ -295,10 +295,16 @@ public class DatabaseConnection {
         }
     }
 
-    public void deleteRental(String assetId) {
+    public void deleteRental(String assetId, int approvHOId, String approvPos,
+                             Date approvElecDate) {
         try {
             String query = "UPDATE asset_transactions " +
-                    "SET isDeleted=TRUE WHERE asset_id=" + assetId;
+                    "SET isDeleted=TRUE, approval_hoid=?, approval_position=?, " +
+                    "aproval_electiondate=? WHERE asset_id=" + assetId;
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, approvHOId);
+            pstmt.setString(2, approvPos);
+            pstmt.setDate(3, new java.sql.Date(approvElecDate.getTime()));
             statement.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
