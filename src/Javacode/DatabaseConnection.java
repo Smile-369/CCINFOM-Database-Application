@@ -224,7 +224,7 @@ public class DatabaseConnection {
 
     public void disposeAsset(int assetID) {
         try {
-            String query = "UPDATE assets SET status='S' WHERE asset_id=" + assetID;
+            String query = "UPDATE assets SET status='X' WHERE asset_id=" + assetID;
             statement.executeUpdate(query);
             query="UPDATE  assets SET enclosing_asset= null WHERE enclosing_asset ="+assetID;
             statement.executeUpdate(query);
@@ -286,7 +286,9 @@ public class DatabaseConnection {
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
                              int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
-            String query1 = "UPDATE asset_transactions SET trans_hoid= ?, trans_position= ?, trans_electiondate= ? WHERE asset_id = "+ assetId +" AND transaction_date=" + rentDate;
+            String query1 = "UPDATE asset_transactions SET trans_hoid=?, " +
+                    "trans_position=?, trans_electiondate=? " +
+                    "WHERE asset_id=" + assetId + " AND transaction_date=" + rentDate;
             PreparedStatement pstmt = connection.prepareStatement(query1);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
@@ -297,7 +299,6 @@ public class DatabaseConnection {
                     "rental_amount=?, discount=?, status=?, inspection_details=?, assessed_value=?, " +
                     "accept_hoid=?, accept_position=?, accept_electiondate=?, return_date=? " +
                     "WHERE asset_id=" + assetId + " AND rental_date=" + rentDate;
-
             pstmt = connection.prepareStatement(query2);
             pstmt.setString(1, reserveDate);
             pstmt.setInt(2, residentId);
@@ -320,14 +321,11 @@ public class DatabaseConnection {
                              String approvElecDate) {
         try {
             String query = "UPDATE asset_transactions " +
-                    "SET isDeleted=TRUE, approval_hoid=?, approval_position=?, " +
-                    "aproval_electiondate=? WHERE asset_id=" + assetId + " " +
-                    "AND rental_date='" + rentDate + "'";
+                    "SET isDeleted=TRUE WHERE asset_id=" + assetId + " " +
+                    "AND rental_date= " + rentDate ;
+            System.out.println(query);
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, approvHOId);
-            pstmt.setString(2, approvPos);
-            pstmt.setString(3, approvElecDate);
-            statement.executeUpdate(query);
+            pstmt.executeUpdate(query);
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -381,10 +379,29 @@ public class DatabaseConnection {
         return transactionList;
     }
     public static void main(String[] args){
+//        DatabaseConnection dbcon = new DatabaseConnection();
+//        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
+//                650.00, 100.0, "R", null, 0.00,
+//                9011, "Auditor", "2022-12-01", 9010,
+//                "Treasurer", "2022-12-01", null);
+//        DatabaseConnection databaseConnection= new DatabaseConnection();
+//        databaseConnection.insertToAsset(121, "fuck", "String assetDescription", "2023-04-16",
+//                true, 312.21,"P", "W",
+//                312.21, 312.21, "SJH");
+//        ArrayList<String> test=databaseConnection.displayAllAssets();
+//        int counter=0;
+//        for (String s : test) {
+//            System.out.println(counter+" "+s);
+//            counter++;
+//        }
+//        System.out.println("AFTER DELETE");
+//        databaseConnection.deleteAsset(121);
+//        test=databaseConnection.displayAllAssets();
+//        for (String s : test) {
+//            System.out.println(s);
+//        }
         DatabaseConnection dbcon = new DatabaseConnection();
-        dbcon.updateRental("5010", "2022-12-23", "2022-12-20", 9017,
-                650.00, 100.0, "R", null, 0.00,
-                9011, "Auditor", "2022-12-01", 9010,
-                "Treasurer", "2022-12-01", null);
+        dbcon.deleteRental(5008, "2022-12-24", 9004,
+                "President", "2022-12-01");
     }
 }
