@@ -1,4 +1,4 @@
-package Javacode.Javacoe;
+package Javacode;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ public class DatabaseConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/hoadb";
-            connection = DriverManager.getConnection(url, "root", "mySQLserver8.0!");
+            connection = DriverManager.getConnection(url, "root", "12345678");
             statement = connection.createStatement();
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
@@ -248,13 +248,13 @@ public class DatabaseConnection {
             pstmt.setInt(3, transHOId);
             pstmt.setString(4, transPos);
             pstmt.setString(5, transElecDate);
-            pstmt.executeUpdate(query);
+            pstmt.executeUpdate();
 
-            String query2 = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
+            query = "INSERT INTO asset_rentals (asset_id, rental_date, reservation_date, resident_id," +
                     " rental_amount, discount, status, inspection_details, assessed_value, accept_hoid," +
                     " accept_position, accept_electiondate, return_date) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?, NULL)";
-            pstmt = connection.prepareStatement(query2);
+            pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, assetId);
             pstmt.setString(2, transDate);
             pstmt.setString(3, reserveDate);
@@ -265,7 +265,7 @@ public class DatabaseConnection {
             pstmt.setInt(8, acceptHOId);
             pstmt.setString(9, acceptPos);
             pstmt.setString(10, acceptElecDate);
-            pstmt.executeUpdate(query2);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("SQLException: " + e.getMessage());
         }
@@ -284,11 +284,12 @@ public class DatabaseConnection {
     public void updateRental(String assetId, String rentDate, String reserveDate, int residentId,
                              double rentAmt, double discount, String status, String inspectDetails,
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
-                             int transHOId, String transPos, String transElecDate, String returnDate) {
+                             int transHOId, String transPos, String transElecDate, String transDate,
+                             String returnDate) {
         try {
             String query = "UPDATE asset_transactions SET trans_hoid=?, " +
                     "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date='" + rentDate + "'";
+                    "WHERE asset_id=" + assetId + " AND transaction_date='" + transDate + "'";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
@@ -333,28 +334,71 @@ public class DatabaseConnection {
             System.err.println("SQLException: " + e.getMessage());
         }
     }
+    public ArrayList<String> displayRentals(int assetId) {
+        ArrayList<String> rentalList = new ArrayList<>();
+        try {
+            String query = "SELECT *FROM asset_rentals WHERE asset_id = "+assetId;
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                rentalList.add(String.valueOf(rs.getInt("asset_id")));
+                rentalList.add(String.valueOf(rs.getDate("rental_date")));
+                rentalList.add(String.valueOf(rs.getDate("reservation_date")));
+                rentalList.add(String.valueOf(rs.getInt("resident_id")));
+                rentalList.add(String.valueOf(rs.getDouble("rental_amount")));
+                rentalList.add(String.valueOf(rs.getDouble("discount")));
+                rentalList.add(rs.getString("status"));
+                rentalList.add(rs.getString("inspection_details"));
+                rentalList.add(String.valueOf(rs.getDouble("assessed_value")));
+                rentalList.add(String.valueOf(rs.getInt("accept_hoid")));
+                rentalList.add(rs.getString("accept_position"));
+                rentalList.add(String.valueOf(rs.getDate("accept_electiondate")));
+                rentalList.add(String.valueOf(rs.getDate("return_date")));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return rentalList;
+    }
+    public ArrayList<String> displayTransactions(int assetId) {
+        ArrayList<String> transactionList = new ArrayList<>();
+        try {
+            String query = "SELECT *FROM asset_transactions WHERE asset_id = "+assetId;
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                transactionList.add(String.valueOf(rs.getInt("asset_id")));
+                transactionList.add(String.valueOf(rs.getDate("transaction_date")));
+                transactionList.add(String.valueOf(rs.getInt("trans_hoid")));
+                transactionList.add(rs.getString("trans_position"));
+                transactionList.add(String.valueOf(rs.getDate("trans_electiondate")));
+                transactionList.add(String.valueOf(rs.getBoolean("isdeleted")));
+                transactionList.add(String.valueOf(rs.getInt("approval_hoid")));
+                transactionList.add(rs.getString("approval_position"));
+                transactionList.add(String.valueOf(rs.getDate("approval_electiondate")));
+                transactionList.add(String.valueOf(rs.getInt("ornum")));
+                transactionList.add(rs.getString("transaction_type"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return transactionList;
+    }
     public static void main(String[] args){
-        /*
         DatabaseConnection databaseConnection= new DatabaseConnection();
         databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH",5001);
-        ArrayList<String> test=databaseConnection.displayAllAssets();
+        ArrayList<String> test=databaseConnection.displayTransactions(5010);
+        int counter=0;
         for (String s : test) {
-            System.out.println(s);
+            System.out.println(counter+" "+s);
+            counter++;
         }
         System.out.println("AFTER DELETE");
         databaseConnection.deleteAsset(12);
         test=databaseConnection.displayAllAssets();
         for (String s : test) {
             System.out.println(s);
-        }*/
+        }
 
-        DatabaseConnection dbCon = new DatabaseConnection();
-        dbCon.updateRental("5010", "2022-12-23", "2023-04-15", 9017,
-                            50.00, 0.00, "N", "Some damage",
-                            0.00, 9010, "Treasurer",
-                            "2022-12-01", 9011, "Auditor",
-                             "2022-12-01", "2023-04-20");
     }
 }
