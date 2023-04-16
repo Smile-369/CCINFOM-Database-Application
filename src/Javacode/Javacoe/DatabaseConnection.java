@@ -359,14 +359,39 @@ public class DatabaseConnection {
         }
         return rentalList;
     }
+    public ArrayList<String> displayTransactions(int assetId) {
+        ArrayList<String> transactionList = new ArrayList<>();
+        try {
+            String query = "SELECT *FROM asset_transactions WHERE asset_id = "+assetId;
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                transactionList.add(String.valueOf(rs.getInt("asset_id")));
+                transactionList.add(String.valueOf(rs.getDate("transaction_date")));
+                transactionList.add(String.valueOf(rs.getInt("trans_hoid")));
+                transactionList.add(rs.getString("trans_position"));
+                transactionList.add(String.valueOf(rs.getDate("trans_electiondate")));
+                transactionList.add(String.valueOf(rs.getBoolean("isdeleted")));
+                transactionList.add(String.valueOf(rs.getInt("approval_hoid")));
+                transactionList.add(rs.getString("approval_position"));
+                transactionList.add(String.valueOf(rs.getDate("approval_electiondate")));
+                transactionList.add(String.valueOf(rs.getInt("ornum")));
+                transactionList.add(rs.getString("transaction_type"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQLException: " + e.getMessage());
+        }
+        return transactionList;
+    }
     public static void main(String[] args){
         DatabaseConnection databaseConnection= new DatabaseConnection();
         databaseConnection.updateAsset(12123, "fuck", "String assetDescription", "2023-04-16",
                 true, 312.21,"P", "W",
                 312.21, 312.21, "SJH",5001);
-        ArrayList<String> test=databaseConnection.displayAllAssets();
+        ArrayList<String> test=databaseConnection.displayRentals(5010);
+        int counter=0;
         for (String s : test) {
-            System.out.println(s);
+            System.out.println(counter+" "+s);
+            counter++;
         }
         System.out.println("AFTER DELETE");
         databaseConnection.deleteAsset(12);
