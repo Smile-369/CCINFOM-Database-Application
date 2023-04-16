@@ -284,12 +284,11 @@ public class DatabaseConnection {
     public void updateRental(String assetId, String rentDate, String reserveDate, int residentId,
                              double rentAmt, double discount, String status, String inspectDetails,
                              double assessedVal, int acceptHOId, String acceptPos, String acceptElecDate,
-                             int transHOId, String transPos, String transElecDate, String transDate,
-                             String returnDate) {
+                             int transHOId, String transPos, String transElecDate, String returnDate) {
         try {
             String query = "UPDATE asset_transactions SET trans_hoid=?, " +
                     "trans_position=?, trans_electiondate=? " +
-                    "WHERE asset_id=" + assetId + " AND transaction_date='" + transDate + "'";
+                    "WHERE asset_id=" + assetId + " AND transaction_date='" + rentDate + "'";
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, transHOId);
             pstmt.setString(2, transPos);
